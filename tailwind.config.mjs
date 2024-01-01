@@ -5,6 +5,13 @@ const defaultTheme = require("tailwindcss/defaultTheme");
 export default {
   darkMode: "class",
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
+  safelist: [
+    "text-blue",
+    "text-cyan",
+    "text-green",
+    "text-darkPurple",
+    "italic",
+  ],
   theme: {
     colors: {
       backgroundDark: "#1a1b26",
