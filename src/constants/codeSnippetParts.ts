@@ -146,7 +146,7 @@ const parts: {
   { color: "white", text: " ", break: true },
   { color: "red", text: "\u00A0\u00A0\u00A0\u00A0\u00A0\u00A0document" },
   { color: "cyan", text: "." },
-  { color: "blue", text: "addEventListener" },
+  { color: "blue", text: "removeEventListener" },
   { color: "white", text: "(" },
   { color: "green", text: '"keyup"' },
   { color: "cyan", text: ", " },
