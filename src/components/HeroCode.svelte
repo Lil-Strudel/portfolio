@@ -1,59 +1,6 @@
 <script lang="ts">
   import { onMount, onDestroy } from "svelte";
-
-  const parts = [
-    {
-      text: "const ",
-      color: "indigo",
-      italic: true,
-    },
-    {
-      text: "welcomeMessage ",
-      color: "blue",
-      bold: true,
-    },
-    {
-      text: "= ",
-      color: "cyan",
-    },
-    {
-      text: '"Hello World"',
-      color: "green",
-      bold: true,
-    },
-    {
-      text: ";",
-      color: "cyan",
-    },
-    {
-      text: " ",
-      color: "white",
-      break: true,
-    },
-    {
-      text: "const ",
-      color: "indigo",
-      italic: true,
-    },
-    {
-      text: "welcomeMessage ",
-      color: "blue",
-      bold: true,
-    },
-    {
-      text: "= ",
-      color: "cyan",
-    },
-    {
-      text: '"Hello World"',
-      color: "green",
-      bold: true,
-    },
-    {
-      text: ";",
-      color: "cyan",
-    },
-  ];
+  import parts from "../constants/codeSnippetParts";
 
   const partLengthCounts = parts.reduce<number[]>((acc, part, index) => {
     let prev = 0;
@@ -83,7 +30,7 @@
       if (charCount === completeString.length) {
         clearInterval(interval);
       }
-    }, 75);
+    }, 50);
   });
 
   onDestroy(() => {
@@ -91,14 +38,14 @@
   });
 </script>
 
-<code class="font-serif text-white">
+<code class="font-serif text-white text-sm font-black">
   {#each parts as part, i}
     {#if charCount >= getPartLength(i - 1)}
       {#if part.break}<br />{:else}
         <span
           class="text-{part.color}"
           class:italic={part.italic}
-          class:font-bold={part.bold}
+          class:font-black={part.bold}
           >{#if charCount > getPartLength(i)}{part.text}{:else}{part.text.slice(
               0,
               charCount - getPartLength(i - 1),
