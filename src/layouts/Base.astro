@@ -47,23 +47,12 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     {article?.tags.map((tag) => (
       <meta property="article:tag" content={tag} />
     ))}
-    <meta
-      name="theme-color"
-      content="#181616"
-      media="(prefers-color-scheme: dark)"
-    />
-    <meta
-      name="theme-color"
-      content="#f2ecbc"
-      media="(prefers-color-scheme: light)"
-    />
+    <meta name="theme-color" content="#181616" />
     <meta name="generator" content={Astro.generator} />
     <script is:inline>
       try {
-        const stored = localStorage.getItem("theme");
-        const prefersDark = matchMedia("(prefers-color-scheme: dark)").matches;
         document.documentElement.dataset.theme =
-          stored ?? (prefersDark ? "dark" : "light");
+          localStorage.getItem("theme") ?? "dark";
       } catch {
         document.documentElement.dataset.theme = "dark";
       }

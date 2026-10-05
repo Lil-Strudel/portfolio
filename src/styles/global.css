@@ -1,32 +1,10 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
-
-/* Kanagawa Lotus. */
-:root {
-  --c-bg: #f2ecbc;
-  --c-bg-alt: #e7dba0;
-  --c-surface: #e5ddb0;
-  --c-line: #d5cea3;
-  --c-fg: #545464;
-  --c-fg-muted: #716e61;
-  --c-comment: #8a8980;
-  --c-blue: #4d699b;
-  --c-cyan: #4e8ca2;
-  --c-purple: #624c83;
-  --c-pink: #b35b79;
-  --c-orange: #cc6d00;
-  --c-yellow: #77713f;
-  --c-green: #6f894e;
-  --c-teal: #597b75;
-  --c-red: #c84053;
-  --c-glow: rgb(77 105 155 / 0.16);
-  color-scheme: light;
-}
+@custom-variant dark (&:where(:root:not([data-theme="light"]), :root:not([data-theme="light"]) *));
 
 /* Kanagawa Dragon. */
-:root[data-theme="dark"] {
+:root {
   --c-bg: #181616;
   --c-bg-alt: #12120f;
   --c-surface: #282727;
@@ -45,6 +23,28 @@
   --c-red: #c4746e;
   --c-glow: rgb(139 164 176 / 0.1);
   color-scheme: dark;
+}
+
+/* Kanagawa Lotus. */
+:root[data-theme="light"] {
+  --c-bg: #f2ecbc;
+  --c-bg-alt: #e7dba0;
+  --c-surface: #e5ddb0;
+  --c-line: #d5cea3;
+  --c-fg: #545464;
+  --c-fg-muted: #716e61;
+  --c-comment: #8a8980;
+  --c-blue: #4d699b;
+  --c-cyan: #4e8ca2;
+  --c-purple: #624c83;
+  --c-pink: #b35b79;
+  --c-orange: #cc6d00;
+  --c-yellow: #77713f;
+  --c-green: #6f894e;
+  --c-teal: #597b75;
+  --c-red: #c84053;
+  --c-glow: rgb(77 105 155 / 0.16);
+  color-scheme: light;
 }
 
 /* The easter egg swaps the accents for Strudel pink. */
@@ -169,11 +169,11 @@
 }
 
 .astro-code span {
-  color: var(--shiki-light);
-  font-style: var(--shiki-light-font-style);
-}
-
-[data-theme="dark"] .astro-code span {
   color: var(--shiki-dark);
   font-style: var(--shiki-dark-font-style);
+}
+
+[data-theme="light"] .astro-code span {
+  color: var(--shiki-light);
+  font-style: var(--shiki-light-font-style);
 }
