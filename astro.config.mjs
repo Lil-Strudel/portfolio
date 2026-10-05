@@ -1,17 +1,24 @@
 import { defineConfig } from "astro/config";
-import tailwind from "@astrojs/tailwind";
 import svelte from "@astrojs/svelte";
-import Icons from "unplugin-icons/vite";
+import sitemap from "@astrojs/sitemap";
+import tailwindcss from "@tailwindcss/vite";
 
-// https://astro.build/config
 export default defineConfig({
-  vite: {
-    plugins: [
-      Icons({
-        compiler: "svelte",
-      }),
-    ],
+  site: "https://lilstrudel.io",
+  integrations: [svelte(), sitemap()],
+  redirects: {
+    "/about-me": "/about",
   },
-  integrations: [tailwind(), svelte()],
+  markdown: {
+    shikiConfig: {
+      themes: {
+        light: "kanagawa-lotus",
+        dark: "kanagawa-dragon",
+      },
+      defaultColor: false,
+    },
+  },
+  vite: {
+    plugins: [tailwindcss()],
+  },
 });
-
