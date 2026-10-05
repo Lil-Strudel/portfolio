@@ -5,6 +5,7 @@ import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   site: "https://www.lilstrudel.io",
+  compressHTML: false,
   integrations: [svelte(), sitemap()],
   redirects: {
     "/about-me": "/about",
