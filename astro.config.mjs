@@ -4,7 +4,7 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
-  site: "https://lilstrudel.io",
+  site: "https://www.lilstrudel.io",
   integrations: [svelte(), sitemap()],
   redirects: {
     "/about-me": "/about",
