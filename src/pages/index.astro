@@ -1,104 +1,161 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import { codeToTokens } from "shiki";
+import Base from "../layouts/Base.astro";
 import HeroCode from "../components/HeroCode.svelte";
+import ProjectCard from "../components/ProjectCard.astro";
+import PostList from "../components/PostList.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import { projects } from "../data/projects";
+import { site } from "../data/site";
+import { getPosts } from "../lib/posts";
+import konamiSource from "../lib/konami.ts?raw";
+
+const ITALIC = 1;
+
+const { tokens } = await codeToTokens(konamiSource.trimEnd(), {
+  lang: "ts",
+  theme: "kanagawa-dragon",
+});
+const lines = tokens.map((line) =>
+  line.map((token) => ({
+    content: token.content,
+    color: token.color,
+    italic: ((token.fontStyle ?? 0) & ITALIC) !== 0,
+  })),
+);
+
+const featured = projects.filter((project) => project.featured);
+const posts = (await getPosts()).slice(0, 4);
+
+const now = [
+  {
+    when: "sep 2026",
+    what: "Shipped a four-track soundboard in discord-audio-streamer 1.3",
+  },
+  {
+    when: "aug 2026",
+    what: "Pinned Ceph after Renovate tried to upgrade me to a release candidate",
+  },
+  {
+    when: "aug 2026",
+    what: "Moved the apps' databases from SQLite to CloudNativePG",
+  },
+  {
+    when: "jul 2026",
+    what: "Rebuilt the homelab around Flux, SOPS and Renovate",
+  },
+];
 ---
 
-<Layout title="Portfolio | Aaron Santo (Lil-Strudel)">
-  <main class="min-w-[100vw] min-h-[100vh] bg-white dark:bg-black">
+<Base>
+  <noscript>
+    <style>
+      .hero-code .pending {
+        visibility: visible;
+      }
+    </style>
+  </noscript>
+
+  <section class="relative isolate overflow-hidden">
     <div
-      class="relative isolate overflow-hidden bg-gradient-to-b from-indigo-100/20 dark:from-black-light/50"
-    >
-      <div
-        class="mx-auto max-w-7xl pb-24 pt-10 sm:pb-32 lg:grid lg:grid-cols-2 lg:gap-x-8 lg:px-8 lg:py-40"
-      >
-        <div class="px-6 lg:px-0 lg:pt-4">
-          <div class="mx-auto max-w-2xl">
-            <div class="max-w-lg">
-              <h1
-                class="mt-10 text-4xl font-serif font-bold tracking-tight text-gray-900 dark:text-white sm:text-6xl"
-              >
-                Aaron Santo
-              </h1>
-              <p
-                class="mt-6 text-lg font-serif leading-8 text-gray-600 dark:text-gray"
-              >
-                // Lil Strudel
-              </p>
-              <div class="mt-10 flex items-center gap-x-6">
-                <a
-                  href="/about-me"
-                  class="rounded-md bg-indigo-600 dark:bg-blue px-3.5 py-2.5 text-sm font-semibold text-white dark:text-black shadow-sm hover:bg-indigo-500 dark:hover:bg-purple focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 dark:focus-visible:outline-indigo"
-                  >About Me</a
-                >
-                <a
-                  href="https://github.com/Lil-Strudel"
-                  target="_blank"
-                  class="text-sm font-semibold leading-6 text-gray-900 dark:text-white"
-                  >View on GitHub <span aria-hidden="true">→</span></a
-                >
-              </div>
-            </div>
-          </div>
-        </div>
-        <div
-          class="mt-20 sm:mt-24 md:mx-auto md:max-w-2xl lg:mx-0 lg:mt-0 lg:w-screen"
-        >
-          <div
-            class="absolute inset-y-0 right-1/2 -z-10 -mr-10 w-[200%] skew-x-[-30deg] bg-white dark:bg-black shadow-xl shadow-indigo-600/10 dark:shadow-blue/10 ring-1 ring-indigo-50 dark:ring-blue md:-mr-20 lg:-mr-36"
-            aria-hidden="true"
+      class="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,var(--c-glow),transparent_60%)]"
+      aria-hidden="true"
+    ></div>
+    <div
+      class="absolute inset-0 -z-10 [background-image:radial-gradient(var(--c-line)_1px,transparent_1px)] [background-size:22px_22px] [mask-image:linear-gradient(to_bottom,black,transparent_85%)] opacity-60"
+      aria-hidden="true"
+    ></div>
+
+    <div class="mx-auto grid max-w-5xl items-center gap-12 px-4 pt-16 pb-20 sm:px-6 sm:pt-24 lg:grid-cols-[1fr_1.3fr] lg:gap-10">
+      <div>
+        <p class="font-mono text-sm text-comment">
+          <span class="text-green">❯</span> whoami
+        </p>
+        <h1 class="mt-3 text-4xl font-bold tracking-tight text-fg sm:text-6xl">
+          Aaron Santo
+        </h1>
+        <p class="mt-2 font-mono text-base text-purple sm:text-lg">
+          // aka Lil Strudel
+        </p>
+        <p class="mt-6 max-w-md text-lg leading-relaxed text-fg-muted">
+          DevOps engineer by day, software developer by night. I write a lot of
+          infrastructure as code, run a six-node Kubernetes cluster at home and
+          build things in whatever language the problem wants.
+        </p>
+        <div class="mt-8 flex flex-wrap items-center gap-3 font-mono text-sm">
+          <a
+            href="/blog"
+            class="rounded-lg bg-blue px-4 py-2 font-semibold text-bg transition-opacity hover:opacity-90"
           >
-          </div>
-          <div class="shadow-lg md:rounded-3xl">
-            <div
-              class="bg-indigo-500 dark:bg-blue [clip-path:inset(0)] md:[clip-path:inset(0_round_theme(borderRadius.3xl))]"
-            >
-              <div
-                class="absolute -inset-y-px left-1/2 -z-10 ml-10 w-[200%] skew-x-[-30deg] bg-indigo-100 dark:bg-purple opacity-20 dark:opacity-40 ring-1 ring-inset ring-white dark:ring-black md:ml-20 lg:ml-36"
-                aria-hidden="true"
-              >
-              </div>
-              <div class="relative px-6 pt-8 sm:pt-16 md:pl-16 md:pr-0">
-                <div class="mx-auto max-w-2xl md:mx-0 md:max-w-none">
-                  <div
-                    class="w-screen overflow-hidden rounded-tl-xl bg-gray-900 dark:bg-black-dark"
-                  >
-                    <div
-                      class="flex bg-gray-800/40 dark:bg-black ring-1 ring-white/5 dark:ring-black-dark"
-                    >
-                      <div
-                        class="-mb-px flex text-sm font-medium leading-6 text-gray-400 dark:text-white"
-                      >
-                        <div
-                          class="border-b border-r border-b-white/20 dark:border-b-blue border-r-white/10 dark:border-r-black-dark bg-white/5 dark:bg-black-light px-4 py-2 text-white"
-                        >
-                          useEasterEgg.tsx
-                        </div>
-                        <div
-                          class="border-r border-gray-600/10 dark:border-black-dark px-4 py-2"
-                        >
-                          App.tsx
-                        </div>
-                      </div>
-                    </div>
-                    <div class="px-6 pb-14 pt-6 min-h-[400px]">
-                      <HeroCode client:only="svelte" />
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="pointer-events-none absolute inset-0 ring-1 ring-inset ring-black/10 dark:ring-white md:rounded-3xl"
-                  aria-hidden="true"
-                >
-                </div>
-              </div>
-            </div>
-          </div>
+            read the blog
+          </a>
+          <a
+            href="/projects"
+            class="rounded-lg border border-line px-4 py-2 text-fg transition-colors hover:border-blue hover:text-blue"
+          >
+            see projects
+          </a>
+          <a
+            href={site.github}
+            class="px-2 py-2 text-fg-muted transition-colors hover:text-fg"
+          >
+            github →
+          </a>
         </div>
       </div>
-      <div
-        class="absolute inset-x-0 bottom-0 -z-10 h-24 bg-gradient-to-t from-white dark:from-black sm:h-32"
-      >
+
+      <div class="min-w-0 overflow-hidden rounded-xl border border-editor-line bg-editor shadow-2xl shadow-black/30 ring-1 ring-black/5">
+        <div class="flex items-end border-b border-editor-line bg-editor-bar font-mono text-xs text-editor-gutter">
+          <span class="border-r border-editor-line border-t-2 border-t-[#8ba4b0] bg-editor px-4 py-2 text-editor-fg">
+            konami.ts
+          </span>
+          <span class="border-r border-editor-line px-4 py-2">Base.astro</span>
+          <span class="ml-auto hidden px-4 py-2 sm:block">src/lib</span>
+        </div>
+        <HeroCode client:load lines={lines} />
       </div>
     </div>
-  </main>
-</Layout>
+  </section>
+
+  <div class="mx-auto max-w-5xl space-y-20 px-4 sm:px-6">
+    <section>
+      <SectionHeading
+        title="Featured projects"
+        href="/projects"
+        linkLabel="all projects"
+      />
+      <div class="grid gap-4 sm:grid-cols-2">
+        {featured.map((project) => (
+          <ProjectCard project={project} />
+        ))}
+      </div>
+    </section>
+
+    <div class="grid gap-16 lg:grid-cols-[1.6fr_1fr]">
+      <section>
+        <SectionHeading
+          title="Latest writing"
+          href="/blog"
+          linkLabel="all posts"
+        />
+        <PostList posts={posts} />
+      </section>
+
+      <section>
+        <SectionHeading title="git log --since=summer" />
+        <ol class="space-y-4 border-l border-line pl-5 font-mono text-sm">
+          {now.map(({ when, what }) => (
+            <li class="relative">
+              <span
+                class="absolute top-1.5 -left-[25px] size-2 rounded-full bg-blue ring-4 ring-bg"
+                aria-hidden="true"
+              />
+              <span class="block text-xs text-comment">{when}</span>
+              <span class="text-fg-muted">{what}</span>
+            </li>
+          ))}
+        </ol>
+      </section>
+    </div>
+  </div>
+</Base>

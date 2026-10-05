@@ -1,0 +1,158 @@
+---
+import Base from "../layouts/Base.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import { site } from "../data/site";
+
+const toolbox = [
+  {
+    label: "infrastructure",
+    items: [
+      "Terraform",
+      "Pulumi",
+      "AWS",
+      "Kubernetes",
+      "Talos",
+      "Flux",
+      "GitHub Actions",
+    ],
+  },
+  {
+    label: "languages",
+    items: ["TypeScript", "Go", "Lua", "Python", "Bash", "HCL"],
+  },
+  {
+    label: "frontend",
+    items: ["Svelte", "SolidJS", "React", "Astro", "Tailwind", "TanStack"],
+  },
+  {
+    label: "data",
+    items: ["Postgres", "Drizzle", "ElectricSQL", "Redis", "Ceph"],
+  },
+];
+
+const desk = [
+  ["os", "Arch Linux + Hyprland"],
+  ["terminal", "Ghostty → tmux → zsh (vi mode)"],
+  ["editor", "Neovim 0.12, twelve plugins"],
+  ["theme", "Kanagawa Dragon, everywhere"],
+  ["display", "Samsung G9, 5120×1440 @ 240 Hz"],
+  ["keyboard", "Corne running ZMK"],
+  ["dotfiles", "yadm + metapac"],
+];
+---
+
+<Base
+  title="About"
+  description="Aaron Santo is a DevOps engineer by day and a software developer by night, based in Utah."
+>
+  <div class="mx-auto max-w-5xl px-4 pt-16 sm:px-6 sm:pt-20">
+    <div class="grid gap-12 lg:grid-cols-[1.4fr_1fr]">
+      <div>
+        <p class="font-mono text-sm text-comment">
+          <span class="text-green">❯</span> cat README.md
+        </p>
+        <h1 class="mt-3 text-4xl font-bold tracking-tight text-fg">
+          Hi, I'm Aaron.
+        </h1>
+        <div class="prose prose-strudel mt-6 max-w-none text-lg">
+          <p>
+            I'm a DevOps engineer in {site.location}. At work I write a lot of
+            infrastructure as code in Terraform and Pulumi, and I care about the
+            boring things that keep systems up: reproducible environments,
+            readable pipelines and changes you can <code>plan</code> before you
+            <code>apply</code>.
+          </p>
+          <p>
+            At home I'm a software developer who can't leave well enough alone.
+            I run a six-node Kubernetes cluster on a stack of OptiPlex Micros,
+            maintain a Discord audio app in Go, and keep rewriting my dotfiles
+            until every line earns its place. Most of my favorite problems live
+            where software meets something physical: a router, a sound card, a
+            disk that has to hold three copies of everything.
+          </p>
+          <p>
+            I go by <strong>Lil Strudel</strong> online. I like small, sharp
+            tools, measuring before optimizing, and code that's clear enough to
+            not need comments. I write about the nerdy parts on the
+            <a href="/blog">blog</a>.
+          </p>
+        </div>
+      </div>
+
+      <aside class="self-start rounded-xl border border-line bg-bg-alt/60 p-6">
+        <img
+          src="/favicon.svg"
+          alt="Lil Strudel avatar"
+          width="88"
+          height="88"
+          class="rounded-full"
+        />
+        <dl class="mt-6 space-y-3 font-mono text-sm">
+          <div class="flex justify-between gap-4">
+            <dt class="text-comment">name</dt>
+            <dd class="text-fg">{site.name}</dd>
+          </div>
+          <div class="flex justify-between gap-4">
+            <dt class="text-comment">handle</dt>
+            <dd class="text-fg">{site.handle}</dd>
+          </div>
+          <div class="flex justify-between gap-4">
+            <dt class="text-comment">location</dt>
+            <dd class="text-fg">{site.location}</dd>
+          </div>
+          <div class="flex justify-between gap-4">
+            <dt class="text-comment">day job</dt>
+            <dd class="text-fg">DevOps engineer</dd>
+          </div>
+          <div class="flex justify-between gap-4">
+            <dt class="text-comment">github</dt>
+            <dd>
+              <a href={site.github} class="text-blue hover:underline">
+                @{site.handle}
+              </a>
+            </dd>
+          </div>
+        </dl>
+      </aside>
+    </div>
+
+    <section class="mt-20">
+      <SectionHeading title="Toolbox" />
+      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {toolbox.map(({ label, items }) => (
+          <div class="rounded-xl border border-line p-5">
+            <h3 class="font-mono text-xs text-comment">{label}</h3>
+            <ul class="mt-3 flex flex-wrap gap-1.5">
+              {items.map((item) => (
+                <li class="rounded bg-surface px-2 py-0.5 text-sm text-fg">
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-20">
+      <SectionHeading
+        title="The desk"
+        href="/blog/dotfiles"
+        linkLabel="how it's built"
+      />
+      <div class="overflow-hidden rounded-xl border border-line font-mono text-sm">
+        {desk.map(([key, value], i) => (
+          <div
+            class:list={[
+              "grid grid-cols-[7rem_1fr] gap-4 px-5 py-2.5",
+              i % 2 === 0 && "bg-bg-alt/60",
+            ]}
+          >
+            <span class="text-comment">{key}</span>
+            <span class="text-fg">{value}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+</Base>

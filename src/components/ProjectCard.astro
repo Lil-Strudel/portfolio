@@ -1,0 +1,52 @@
+---
+import type { Project } from "../data/projects";
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const href = project.post ? `/blog/${project.post}` : project.repo;
+---
+
+<article class="group relative flex flex-col rounded-xl border border-line bg-bg-alt/60 p-5 transition-colors hover:border-blue/60 hover:bg-bg-alt">
+  <h3 class="font-mono text-base font-semibold text-fg">
+    <a
+      href={href}
+      class="before:text-comment before:content-['./'] after:absolute after:inset-0"
+    >
+      {project.name}
+    </a>
+  </h3>
+  <p class="mt-2 flex-1 text-sm leading-relaxed text-fg-muted">
+    {project.summary}
+  </p>
+  <ul class="mt-4 flex flex-wrap gap-1.5" aria-label="Stack">
+    {project.stack.map((tech) => (
+      <li class="rounded border border-line px-1.5 py-0.5 font-mono text-[0.7rem] text-comment">
+        {tech}
+      </li>
+    ))}
+  </ul>
+  <div class="relative z-10 mt-4 flex gap-4 font-mono text-xs">
+    {project.post && (
+      <a href={`/blog/${project.post}`} class="text-blue hover:underline">
+        read the write-up →
+      </a>
+    )}
+    <a
+      href={project.repo}
+      class="text-fg-muted transition-colors hover:text-fg"
+    >
+      source
+    </a>
+    {project.url && (
+      <a
+        href={project.url}
+        class="text-fg-muted transition-colors hover:text-fg"
+      >
+        live
+      </a>
+    )}
+  </div>
+</article>

@@ -1,0 +1,38 @@
+---
+import { formatDate, readingMinutes, type Post } from "../lib/posts";
+
+interface Props {
+  posts: Post[];
+}
+
+const { posts } = Astro.props;
+---
+
+<ol class="divide-y divide-line/70">
+  {posts.map((post) => (
+    <li>
+      <a
+        href={`/blog/${post.id}`}
+        class="group grid gap-1 py-5 sm:grid-cols-[8rem_1fr] sm:gap-6"
+      >
+        <span class="font-mono text-xs leading-6 text-comment">
+          <time datetime={post.data.published.toISOString()}>
+            {formatDate(post.data.published)}
+          </time>
+        </span>
+        <span>
+          <span class="block font-semibold text-fg transition-colors group-hover:text-blue">
+            {post.data.title}
+          </span>
+          <span class="mt-1 block text-sm leading-relaxed text-fg-muted">
+            {post.data.description}
+          </span>
+          <span class="mt-2 block font-mono text-xs text-comment">
+            {readingMinutes(post)} min read ·{" "}
+            {post.data.tags.map((tag) => `#${tag}`).join(" ")}
+          </span>
+        </span>
+      </a>
+    </li>
+  ))}
+</ol>

@@ -1,0 +1,21 @@
+---
+import Base from "../layouts/Base.astro";
+---
+
+<Base title="Not found">
+  <div class="mx-auto max-w-3xl px-4 pt-24 font-mono sm:px-6">
+    <p class="text-sm text-comment">
+      <span class="text-green">❯</span> cd {Astro.url.pathname}
+    </p>
+    <p class="mt-2 text-sm text-red">
+      cd: no such file or directory: {Astro.url.pathname}
+    </p>
+    <h1 class="mt-10 text-5xl font-bold text-fg">404</h1>
+    <p class="mt-4 font-sans text-lg text-fg-muted">
+      This page doesn't exist, or it got pruned when I renamed a Kustomization.
+    </p>
+    <a href="/" class="mt-8 inline-block text-sm text-blue hover:underline">
+      cd ~
+    </a>
+  </div>
+</Base>

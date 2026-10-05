@@ -1,0 +1,53 @@
+---
+import Base from "../layouts/Base.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import { projects } from "../data/projects";
+import { site } from "../data/site";
+
+const featured = projects.filter((project) => project.featured);
+const others = projects.filter((project) => !project.featured);
+---
+
+<Base
+  title="Projects"
+  description="Things Aaron Santo has built: a Talos Kubernetes homelab, desktop apps in Go, keyboard firmware tooling and more."
+>
+  <div class="mx-auto max-w-5xl px-4 pt-16 sm:px-6 sm:pt-20">
+    <header class="max-w-2xl">
+      <p class="font-mono text-sm text-comment">
+        <span class="text-green">❯</span> ls ~/code/personal
+      </p>
+      <h1 class="mt-3 text-4xl font-bold tracking-tight text-fg">Projects</h1>
+      <p class="mt-4 text-lg leading-relaxed text-fg-muted">
+        Some of these are serious, some exist because I wanted to see if I
+        could. The big ones have write-ups; everything is on
+        <a
+          href={site.github}
+          class="text-blue underline decoration-blue/40 underline-offset-4 hover:decoration-blue"
+        >
+          GitHub
+        </a>
+        .
+      </p>
+    </header>
+
+    <section class="mt-14">
+      <SectionHeading title="Featured" />
+      <div class="grid gap-4 sm:grid-cols-2">
+        {featured.map((project) => (
+          <ProjectCard project={project} />
+        ))}
+      </div>
+    </section>
+
+    <section class="mt-16">
+      <SectionHeading title="More from the workbench" />
+      <div class="grid gap-4 sm:grid-cols-2">
+        {others.map((project) => (
+          <ProjectCard project={project} />
+        ))}
+      </div>
+    </section>
+  </div>
+</Base>

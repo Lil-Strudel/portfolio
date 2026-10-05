@@ -1,0 +1,179 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* Kanagawa Lotus. */
+:root {
+  --c-bg: #f2ecbc;
+  --c-bg-alt: #e7dba0;
+  --c-surface: #e5ddb0;
+  --c-line: #d5cea3;
+  --c-fg: #545464;
+  --c-fg-muted: #716e61;
+  --c-comment: #8a8980;
+  --c-blue: #4d699b;
+  --c-cyan: #4e8ca2;
+  --c-purple: #624c83;
+  --c-pink: #b35b79;
+  --c-orange: #cc6d00;
+  --c-yellow: #77713f;
+  --c-green: #6f894e;
+  --c-teal: #597b75;
+  --c-red: #c84053;
+  --c-glow: rgb(77 105 155 / 0.16);
+  color-scheme: light;
+}
+
+/* Kanagawa Dragon. */
+:root[data-theme="dark"] {
+  --c-bg: #181616;
+  --c-bg-alt: #12120f;
+  --c-surface: #282727;
+  --c-line: #393836;
+  --c-fg: #c5c9c5;
+  --c-fg-muted: #a6a69c;
+  --c-comment: #737c73;
+  --c-blue: #8ba4b0;
+  --c-cyan: #8ea4a2;
+  --c-purple: #8992a7;
+  --c-pink: #a292a3;
+  --c-orange: #b6927b;
+  --c-yellow: #c4b28a;
+  --c-green: #87a987;
+  --c-teal: #949fb5;
+  --c-red: #c4746e;
+  --c-glow: rgb(139 164 176 / 0.1);
+  color-scheme: dark;
+}
+
+/* The easter egg swaps the accents for Strudel pink. */
+:root[data-konami] {
+  --c-blue: var(--c-pink);
+  --c-purple: var(--c-red);
+}
+
+@theme inline {
+  --color-bg: var(--c-bg);
+  --color-bg-alt: var(--c-bg-alt);
+  --color-surface: var(--c-surface);
+  --color-line: var(--c-line);
+  --color-fg: var(--c-fg);
+  --color-fg-muted: var(--c-fg-muted);
+  --color-comment: var(--c-comment);
+  --color-blue: var(--c-blue);
+  --color-cyan: var(--c-cyan);
+  --color-purple: var(--c-purple);
+  --color-pink: var(--c-pink);
+  --color-orange: var(--c-orange);
+  --color-yellow: var(--c-yellow);
+  --color-green: var(--c-green);
+  --color-teal: var(--c-teal);
+  --color-red: var(--c-red);
+  --color-glow: var(--c-glow);
+}
+
+@theme {
+  --color-editor: #181616;
+  --color-editor-fg: #c5c9c5;
+  --color-editor-bar: #0d0c0c;
+  --color-editor-line: #282727;
+  --color-editor-gutter: #625e5a;
+
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    @apply bg-bg text-fg antialiased;
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    @apply min-h-dvh bg-bg font-sans;
+  }
+
+  ::selection {
+    @apply bg-blue/30;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-blue;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+}
+
+@utility prose-strudel {
+  --tw-prose-body: var(--c-fg);
+  --tw-prose-headings: var(--c-fg);
+  --tw-prose-lead: var(--c-fg-muted);
+  --tw-prose-links: var(--c-blue);
+  --tw-prose-bold: var(--c-fg);
+  --tw-prose-counters: var(--c-comment);
+  --tw-prose-bullets: var(--c-comment);
+  --tw-prose-hr: var(--c-line);
+  --tw-prose-quotes: var(--c-fg-muted);
+  --tw-prose-quote-borders: var(--c-purple);
+  --tw-prose-captions: var(--c-comment);
+  --tw-prose-code: var(--c-teal);
+  --tw-prose-pre-code: var(--c-fg);
+  --tw-prose-pre-bg: var(--c-bg-alt);
+  --tw-prose-th-borders: var(--c-line);
+  --tw-prose-td-borders: var(--c-line);
+
+  & :where(h2, h3) {
+    @apply font-mono tracking-tight;
+    scroll-margin-top: 6rem;
+  }
+
+  & :where(h2)::before {
+    content: "## ";
+    @apply text-comment;
+  }
+
+  & :where(h3)::before {
+    content: "### ";
+    @apply text-comment;
+  }
+
+  & :where(a) {
+    @apply decoration-blue/40 underline-offset-4 transition-colors hover:decoration-blue;
+  }
+
+  & :where(:not(pre) > code) {
+    @apply rounded bg-surface px-1.5 py-0.5 font-normal;
+  }
+
+  & :where(:not(pre) > code)::before,
+  & :where(:not(pre) > code)::after {
+    content: none;
+  }
+
+  & :where(pre) {
+    @apply rounded-xl border border-line text-[0.85em] leading-relaxed;
+  }
+
+  & :where(table) {
+    @apply text-sm;
+  }
+}
+
+.astro-code {
+  background-color: var(--c-bg-alt) !important;
+}
+
+.astro-code span {
+  color: var(--shiki-light);
+  font-style: var(--shiki-light-font-style);
+}
+
+[data-theme="dark"] .astro-code span {
+  color: var(--shiki-dark);
+  font-style: var(--shiki-dark-font-style);
+}

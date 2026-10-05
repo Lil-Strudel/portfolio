@@ -1,0 +1,124 @@
+---
+import type { GetStaticPaths } from "astro";
+import { render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import {
+  formatDate,
+  getPosts,
+  readingMinutes,
+  type Post,
+} from "../../lib/posts";
+
+export const getStaticPaths = (async () => {
+  const posts = await getPosts();
+  return posts.map((post, i) => ({
+    params: { id: post.id },
+    props: { post, newer: posts[i - 1], older: posts[i + 1] },
+  }));
+}) satisfies GetStaticPaths;
+
+interface Props {
+  post: Post;
+  newer: Post | undefined;
+  older: Post | undefined;
+}
+
+const { post, newer, older } = Astro.props;
+const { Content, headings } = await render(post);
+const toc = headings.filter((heading) => heading.depth === 2);
+---
+
+<Base
+  title={post.data.title}
+  description={post.data.description}
+  article={{ published: post.data.published, tags: post.data.tags }}
+>
+  <article class="mx-auto max-w-3xl px-4 pt-14 sm:px-6 sm:pt-20">
+    <a
+      href="/blog"
+      class="font-mono text-xs text-fg-muted transition-colors hover:text-blue"
+    >
+      ← cd ../blog
+    </a>
+    <header class="mt-6 border-b border-line pb-8">
+      <h1 class="text-3xl leading-tight font-bold tracking-tight text-fg sm:text-4xl">
+        {post.data.title}
+      </h1>
+      <p class="mt-4 text-lg leading-relaxed text-fg-muted">
+        {post.data.description}
+      </p>
+      <p class="mt-5 flex flex-wrap gap-x-3 gap-y-1 font-mono text-xs text-comment">
+        <time datetime={post.data.published.toISOString()}>
+          {formatDate(post.data.published)}
+        </time>
+        <span aria-hidden="true">·</span>
+        <span>{readingMinutes(post)} min read</span>
+        <span aria-hidden="true">·</span>
+        <span class="text-purple">
+          {post.data.tags.map((tag) => `#${tag}`).join(" ")}
+        </span>
+        {post.data.repo && (
+          <>
+            <span aria-hidden="true">·</span>
+            <a href={post.data.repo} class="text-blue hover:underline">
+              source
+            </a>
+          </>
+        )}
+      </p>
+    </header>
+
+    {toc.length > 2 && (
+      <nav
+        class="mt-8 rounded-xl border border-line bg-bg-alt/60 px-5 py-4 font-mono text-sm"
+        aria-label="Table of contents"
+      >
+        <p class="text-xs text-comment">:TOC</p>
+        <ol class="mt-2 space-y-1">
+          {toc.map((heading) => (
+            <li>
+              <a
+                href={`#${heading.slug}`}
+                class="text-fg-muted transition-colors hover:text-blue"
+              >
+                {heading.text}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </nav>
+    )}
+
+    <div class="prose prose-strudel mt-10 max-w-none prose-headings:font-semibold">
+      <Content />
+    </div>
+
+    <nav
+      class="mt-16 grid gap-4 border-t border-line pt-8 sm:grid-cols-2"
+      aria-label="More posts"
+    >
+      {older && (
+        <a
+          href={`/blog/${older.id}`}
+          class="group rounded-xl border border-line p-4 transition-colors hover:border-blue/60"
+        >
+          <span class="font-mono text-xs text-comment">← older</span>
+          <span class="mt-1 block font-semibold text-fg group-hover:text-blue">
+            {older.data.title}
+          </span>
+        </a>
+      )}
+      {newer && (
+        <a
+          href={`/blog/${newer.id}`}
+          class="group rounded-xl border border-line p-4 text-right transition-colors hover:border-blue/60 sm:col-start-2"
+        >
+          <span class="font-mono text-xs text-comment">newer →</span>
+          <span class="mt-1 block font-semibold text-fg group-hover:text-blue">
+            {newer.data.title}
+          </span>
+        </a>
+      )}
+    </nav>
+  </article>
+</Base>
