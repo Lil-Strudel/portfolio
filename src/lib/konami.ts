@@ -14,8 +14,8 @@ const sequence = [
 export function onKonami(unlock: () => void) {
   let recent: string[] = [];
 
-  const onKeyUp = (event: KeyboardEvent) => {
-    recent = [...recent, event.key].slice(-sequence.length);
+  const onKeyUp = ({ key }: KeyboardEvent) => {
+    recent = [...recent, key].slice(-sequence.length);
 
     if (recent.join() === sequence.join()) {
       recent = [];
@@ -23,6 +23,6 @@ export function onKonami(unlock: () => void) {
     }
   };
 
-  document.addEventListener("keyup", onKeyUp);
-  return () => document.removeEventListener("keyup", onKeyUp);
+  addEventListener("keyup", onKeyUp);
+  return () => removeEventListener("keyup", onKeyUp);
 }

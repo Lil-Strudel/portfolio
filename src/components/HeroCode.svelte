@@ -12,7 +12,8 @@
     lines: Token[][];
   }
 
-  const CHARS_PER_SECOND = 180;
+  const MS_PER_KEYSTROKE = 24;
+  const MS_PER_NEWLINE = 140;
 
   let { lines }: Props = $props();
 
@@ -25,6 +26,26 @@
     }, []),
   );
   const totalChars = $derived(lineStarts.at(-1)! + lineLength(lines.at(-1)!));
+
+  const text = $derived(
+    lines.map((line) => line.map((token) => token.content).join("")).join("\n"),
+  );
+
+  // Indentation appears instantly, the way an editor auto-indents.
+  const typedAt = $derived.by(() => {
+    let elapsed = 0;
+    let indenting = true;
+    return text.split("").map((char) => {
+      if (char === "\n") {
+        indenting = true;
+        elapsed += MS_PER_NEWLINE;
+      } else if (!(indenting && char === " ")) {
+        indenting = false;
+        elapsed += MS_PER_KEYSTROKE;
+      }
+      return elapsed;
+    });
+  });
 
   let typed = $state(0);
   let unlocked = $state(false);
@@ -59,7 +80,9 @@
 
     const startedAt = performance.now();
     let frame = requestAnimationFrame(function tick(now) {
-      typed = Math.floor(((now - startedAt) / 1000) * CHARS_PER_SECOND);
+      let next = typed;
+      while (next < totalChars && typedAt[next]! <= now - startedAt) next++;
+      typed = next;
       if (!done) frame = requestAnimationFrame(tick);
     });
 
@@ -77,13 +100,13 @@
 
 <div class="hero-code" aria-label="Source of konami.ts">
   <pre
-    class="overflow-x-auto px-5 py-4 font-mono text-[0.8rem] leading-6 text-editor-fg sm:text-sm"><code
+    class="px-5 py-4 font-mono text-[0.8rem] leading-6 text-editor-fg sm:text-sm lg:text-[0.8rem]"><code
       >{#each lines as line, l}{@const lineEnd =
           lineStarts[l]! + lineLength(line)}<span class="flex"
           ><span
             class="mr-5 w-6 shrink-0 select-none text-right text-editor-gutter"
             aria-hidden="true">{l + 1}</span
-          ><span class="whitespace-pre"
+          ><span class="min-w-0 wrap-anywhere whitespace-pre-wrap"
             >{#each line as token, t}{@const start = tokenStart(
                 l,
                 t,
