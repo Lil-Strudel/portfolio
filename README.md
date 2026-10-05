@@ -1,54 +1,71 @@
-# Astro Starter Kit: Basics
+# lilstrudel.io
+
+My portfolio and blog: projects, a homelab, Go, and the nerdy parts in between.
+
+Built with [Astro](https://astro.build) 7, [Svelte](https://svelte.dev) 5 and [Tailwind CSS](https://tailwindcss.com) 4, themed in [Kanagawa](https://github.com/rebelot/kanagawa.nvim): Dragon for dark mode and Lotus for light, so the site matches my terminal.
+
+## Getting started
+
+Requires Node 22.12 or newer.
 
 ```sh
-npm create astro@latest -- --template basics
+npm install
+npm run dev
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+The dev server runs at `localhost:4321`.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+| Command           | What it does                                         |
+| :---------------- | :--------------------------------------------------- |
+| `npm run dev`     | Start the dev server with hot reload                 |
+| `npm run build`   | Type-check with `astro check`, then build to `dist/` |
+| `npm run preview` | Serve the production build locally                   |
+| `npm run check`   | Type-check only                                      |
+| `npm run format`  | Format everything with Prettier                      |
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+## Layout
 
 ```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── components/
-│   │   └── Card.astro
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
+src/
+├── components/       Header, Footer, ProjectCard, PostList, HeroCode.svelte
+├── content/blog/     Blog posts, one Markdown file each
+├── content.config.ts Frontmatter schema for posts
+├── data/             Site metadata and the projects list
+├── layouts/Base.astro  <head>, theme bootstrapping, header and footer
+├── lib/              Post helpers and the Konami listener
+├── pages/            Routes, plus rss.xml.ts
+└── styles/global.css Tailwind setup, Kanagawa tokens, prose styles
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## Writing a post
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Add a Markdown file to `src/content/blog/`. The filename becomes the URL, so `my-post.md` is served at `/blog/my-post`.
 
-Any static assets, like images, can be placed in the `public/` directory.
+```yaml
+---
+title: "The title"
+description: "One or two sentences for the post list, RSS and link previews."
+published: 2026-10-04
+tags: [kubernetes, go]
+repo: https://github.com/Lil-Strudel/some-repo # optional
+draft: true # optional; drafts show in dev and are left out of builds
+---
+```
 
-## 🧞 Commands
+Posts with more than two `##` headings get a table of contents automatically. Code blocks are highlighted at build time by Shiki in both Kanagawa themes, so they follow the light/dark toggle.
 
-All commands are run from the root of the project, from a terminal:
+To feature a post on a project card, set `post` to the post's filename in `src/data/projects.ts`.
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## Theming
 
-## 👀 Want to learn more?
+Every color is a CSS variable in `src/styles/global.css`, redefined under `[data-theme="dark"]` and exposed to Tailwind as `bg-bg`, `text-fg`, `text-blue` and so on. Components never need `dark:` variants. To change the palette, edit those two blocks.
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+The theme follows the system preference until someone clicks the toggle, after which their choice is kept in `localStorage`.
+
+## The hero
+
+The code in the home page's editor window is the real source of `src/lib/konami.ts`, highlighted at build time and typed out by `HeroCode.svelte`. It's also the code that runs, so try the Konami code on the home page.
+
+## Deploying
+
+`npm run build` produces a fully static site in `dist/` with a sitemap and RSS feed. Set the production URL in `astro.config.mjs` (`site`) so canonical links, the sitemap and RSS point at the right domain.
