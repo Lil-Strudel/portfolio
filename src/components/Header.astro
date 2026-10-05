@@ -1,5 +1,7 @@
 ---
+import { Image } from "astro:assets";
 import { site } from "../data/site";
+import avatar from "../assets/avatar.jpg";
 
 const links = [
   { href: "/about", label: "about" },
@@ -21,7 +23,14 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
       class="group mr-auto flex items-center gap-2.5"
       aria-label="Home"
     >
-      <img src="/favicon.svg" alt="" width="26" height="26" />
+      <Image
+        src={avatar}
+        alt=""
+        width={26}
+        height={26}
+        densities={[1, 2]}
+        class="rounded-full"
+      />
       <span class="hidden text-fg-muted transition-colors group-hover:text-fg sm:inline">
         ~/<span class="text-fg">strudel</span>
       </span>
@@ -32,7 +41,7 @@ const isActive = (href: string) => path === href || path.startsWith(`${href}/`);
           <a
             href={href}
             aria-current={isActive(href) ? "page" : undefined}
-            class="rounded-md px-2 py-1 text-fg-muted transition-colors before:text-comment before:content-[':'] hover:text-fg aria-[current=page]:text-blue"
+            class="inline-flex rounded-md px-2 py-1 text-fg-muted transition-colors before:text-comment before:content-[':'] hover:text-fg aria-[current=page]:text-blue"
           >
             {label}
           </a>

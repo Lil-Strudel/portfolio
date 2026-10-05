@@ -66,6 +66,10 @@ The theme follows the system preference until someone clicks the toggle, after w
 
 The code in the home page's editor window is the real source of `src/lib/konami.ts`, highlighted at build time and typed out by `HeroCode.svelte`. It's also the code that runs, so try the Konami code on the home page.
 
+## Avatar
+
+`src/assets/avatar.jpg` is my GitHub avatar (`https://github.com/Lil-Strudel.png`). The header and About page render it through Astro's `<Image>`, and `public/favicon.png` and `public/apple-touch-icon.png` are resized copies of it. If the GitHub picture changes, replace all three.
+
 ## Deploying
 
 `npm run build` produces a fully static site in `dist/` with a sitemap and RSS feed. Set the production URL in `astro.config.mjs` (`site`) so canonical links, the sitemap and RSS point at the right domain.

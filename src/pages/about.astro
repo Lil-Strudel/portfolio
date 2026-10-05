@@ -1,7 +1,9 @@
 ---
+import { Image } from "astro:assets";
 import Base from "../layouts/Base.astro";
 import SectionHeading from "../components/SectionHeading.astro";
 import { site } from "../data/site";
+import avatar from "../assets/avatar.jpg";
 
 const toolbox = [
   {
@@ -80,12 +82,13 @@ const desk = [
       </div>
 
       <aside class="self-start rounded-xl border border-line bg-bg-alt/60 p-6">
-        <img
-          src="/favicon.svg"
-          alt="Lil Strudel avatar"
-          width="88"
-          height="88"
-          class="rounded-full"
+        <Image
+          src={avatar}
+          alt="Aaron's avatar: a white and orange koi in an aquarium"
+          width={112}
+          height={112}
+          densities={[1, 2]}
+          class="rounded-full ring-2 ring-line"
         />
         <dl class="mt-6 space-y-3 font-mono text-sm">
           <div class="flex justify-between gap-4">
